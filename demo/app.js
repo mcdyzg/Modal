@@ -48,7 +48,7 @@ var APP = React.createClass({
         var self = this;
         return (
             <div>
-                {['DropModal','LeftModal','ScaleModal','WaveModal'].map(function(name, ind){
+                {['DropModal','LeftModal','ScaleModal','WaveModal','BottomModal'].map(function(name, ind){
                     return self.getTiggerAndModal(name, ind);
                 })}
             </div>

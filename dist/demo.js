@@ -94,7 +94,7 @@
 	        var self = this;
 	        return (
 	            React.createElement("div", null, 
-	                ['DropModal','LeftModal','ScaleModal','WaveModal'].map(function(name, ind){
+	                ['DropModal','LeftModal','ScaleModal','WaveModal','BottomModal'].map(function(name, ind){
 	                    return self.getTiggerAndModal(name, ind);
 	                })
 	            )
@@ -109,98 +109,19 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = {
-	    DropModal: __webpack_require__(2),
-	    LeftModal: __webpack_require__(3),
-	    ScaleModal: __webpack_require__(4),
-	    WaveModal: __webpack_require__(5)
+	    DropModal: __webpack_require__(4),
+	    LeftModal: __webpack_require__(2),
+	    ScaleModal: __webpack_require__(3),
+	    WaveModal: __webpack_require__(5),
+	    BottomModal: __webpack_require__(6)
 	}
 
 /***/ },
 /* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var modalFactory = __webpack_require__(6);
-	var insertKeyframesRule = __webpack_require__(7);
-	var appendVendorPrefix = __webpack_require__(8);
-
-	var animation = {
-	    show: {
-	        animationDuration: '0.4s',
-	        animationTimingFunction: 'cubic-bezier(0.7,0,0.3,1)'
-	    },
-
-	    hide: {
-	        animationDuration: '0.4s',
-	        animationTimingFunction: 'cubic-bezier(0.7,0,0.3,1)'
-	    },
-
-	    showModalAnimation: insertKeyframesRule({
-	        '0%': {
-	            opacity: 0,
-	            transform: 'translate3d(-50%, -300px, 0)'
-	        },
-	        '100%': {
-	            opacity: 1,
-	            transform: 'translate3d(-50%, -50%, 0)'
-	        }
-	    }),
-
-	    hideModalAnimation: insertKeyframesRule({
-	        '0%': {
-	            opacity: 1,
-	            transform: 'translate3d(-50%, -50%, 0)'
-	        },
-	        '100%': {
-	            opacity: 0,
-	            transform: 'translate3d(-50%, 100px, 0)'
-	        }
-	    })
-	};
-
-	var showAnimation = animation.show;
-	var hideAnimation = animation.hide;
-	var showModalAnimation = animation.showModalAnimation;
-	var hideModalAnimation = animation.hideModalAnimation;
-
-	module.exports = modalFactory({
-
-	    show : showAnimation,
-	    hide : hideAnimation,
-
-	    getRef: function(willHidden) {
-	        return 'modal';
-	    },
-
-	    getModalStyle: function(willHidden) {
-	        return appendVendorPrefix({
-	            position: "fixed",
-	            width: "500px",
-	            transform: "translate3d(-300px, -50%, 0)",
-	            top: "50%",
-	            left: "50%",
-	            backgroundColor: "white",
-	            zIndex: 1050,
-	            animationDuration: (willHidden ? hideAnimation : showAnimation).animationDuration,
-	            animationFillMode: 'forwards',
-	            animationName: willHidden ? hideModalAnimation : showModalAnimation,
-	            animationTimingFunction: (willHidden ? hideAnimation : showAnimation).animationTimingFunction
-	        })
-	    },
-	   
-	    getContentStyle: function(willHidden) {
-	        return appendVendorPrefix({
-	            margin: 0
-	        });
-	    }
-	});
-
-
-/***/ },
-/* 3 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var modalFactory = __webpack_require__(6);
-	var insertKeyframesRule = __webpack_require__(7);
+	var modalFactory = __webpack_require__(7);
+	var insertKeyframesRule = __webpack_require__(9);
 	var appendVendorPrefix = __webpack_require__(8);
 
 	var animation = {
@@ -276,11 +197,11 @@
 
 
 /***/ },
-/* 4 */
+/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var modalFactory = __webpack_require__(6);
-	var insertKeyframesRule = __webpack_require__(7);
+	var modalFactory = __webpack_require__(7);
+	var insertKeyframesRule = __webpack_require__(9);
 	var appendVendorPrefix = __webpack_require__(8);
 
 	var animation = {
@@ -349,12 +270,92 @@
 
 
 /***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var modalFactory = __webpack_require__(7);
+	var insertKeyframesRule = __webpack_require__(9);
+	var appendVendorPrefix = __webpack_require__(8);
+
+	var animation = {
+	    show: {
+	        animationDuration: '0.4s',
+	        animationTimingFunction: 'cubic-bezier(0.7,0,0.3,1)'
+	    },
+
+	    hide: {
+	        animationDuration: '0.4s',
+	        animationTimingFunction: 'cubic-bezier(0.7,0,0.3,1)'
+	    },
+
+	    showModalAnimation: insertKeyframesRule({
+	        '0%': {
+	            opacity: 0,
+	            transform: 'translate3d(-50%, -300px, 0)'
+	        },
+	        '100%': {
+	            opacity: 1,
+	            transform: 'translate3d(-50%, -50%, 0)'
+	        }
+	    }),
+
+	    hideModalAnimation: insertKeyframesRule({
+	        '0%': {
+	            opacity: 1,
+	            transform: 'translate3d(-50%, -50%, 0)'
+	        },
+	        '100%': {
+	            opacity: 0,
+	            transform: 'translate3d(-50%, 100px, 0)'
+	        }
+	    })
+	};
+
+	var showAnimation = animation.show;
+	var hideAnimation = animation.hide;
+	var showModalAnimation = animation.showModalAnimation;
+	var hideModalAnimation = animation.hideModalAnimation;
+
+	module.exports = modalFactory({
+
+	    show : showAnimation,
+	    hide : hideAnimation,
+
+	    getRef: function(willHidden) {
+	        return 'modal';
+	    },
+
+	    getModalStyle: function(willHidden) {
+	        return appendVendorPrefix({
+	            position: "fixed",
+	            width: "500px",
+	            transform: "translate3d(-300px, -50%, 0)",
+	            top: "50%",
+	            left: "50%",
+	            backgroundColor: "white",
+	            zIndex: 1050,
+	            animationDuration: (willHidden ? hideAnimation : showAnimation).animationDuration,
+	            animationFillMode: 'forwards',
+	            animationName: willHidden ? hideModalAnimation : showModalAnimation,
+	            animationTimingFunction: (willHidden ? hideAnimation : showAnimation).animationTimingFunction
+	        })
+	    },
+	   
+	    getContentStyle: function(willHidden) {
+	        return appendVendorPrefix({
+	            margin: 0
+	        });
+	    }
+	});
+
+
+/***/ },
 /* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 这里的样式是网上抄来的，觉得挺有意思就加进来了
-	var modalFactory = __webpack_require__(6);
-	var insertKeyframesRule = __webpack_require__(7);
+	var modalFactory = __webpack_require__(7);
+	var insertKeyframesRule = __webpack_require__(9);
 	var appendVendorPrefix = __webpack_require__(8);
 
 	var animation = {
@@ -570,8 +571,88 @@
 /* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var transitionEvents = __webpack_require__(9);
-	var insertKeyframesRule = __webpack_require__(7);
+	var modalFactory = __webpack_require__(7);
+	var insertKeyframesRule = __webpack_require__(9);
+	var appendVendorPrefix = __webpack_require__(8);
+
+	var animation = {
+	    show: {
+	        animationDuration: '0.4s',
+	        animationTimingFunction: 'cubic-bezier(0.7,0,0.3,1)'
+	    },
+
+	    hide: {
+	        animationDuration: '0.4s',
+	        animationTimingFunction: 'cubic-bezier(0.7,0,0.3,1)'
+	    },
+
+	    showModalAnimation: insertKeyframesRule({
+	        '0%': {
+	            opacity: 0
+	            // transform: 'translate3d(-50%, -300px, 0)'
+	        },
+	        '100%': {
+	            opacity: 1,
+	            transform: 'translate3d(-50%, -100%, 0)'
+	        }
+	    }),
+
+	    hideModalAnimation: insertKeyframesRule({
+	        '0%': {
+	            opacity: 1,
+	            transform: 'translate3d(-50%, -100%, 0)'
+	        },
+	        '100%': {
+	            opacity: 0,
+	            transform: 'translate3d(-50%, 0, 0)'
+	        }
+	    })
+	};
+
+	var showAnimation = animation.show;
+	var hideAnimation = animation.hide;
+	var showModalAnimation = animation.showModalAnimation;
+	var hideModalAnimation = animation.hideModalAnimation;
+
+	module.exports = modalFactory({
+
+	    show : showAnimation,
+	    hide : hideAnimation,
+
+	    getRef: function(willHidden) {
+	        return 'modal';
+	    },
+
+	    getModalStyle: function(willHidden) {
+	        return appendVendorPrefix({
+	            position: "fixed",
+	            width: "500px",
+	            transform: "translate3d(-50%, 0, 0)",
+	            top: "100%",
+	            left: "50%",
+	            backgroundColor: "white",
+	            zIndex: 1050,
+	            animationDuration: (willHidden ? hideAnimation : showAnimation).animationDuration,
+	            animationFillMode: 'forwards',
+	            animationName: willHidden ? hideModalAnimation : showModalAnimation,
+	            animationTimingFunction: (willHidden ? hideAnimation : showAnimation).animationTimingFunction
+	        })
+	    },
+	   
+	    getContentStyle: function(willHidden) {
+	        return appendVendorPrefix({
+	            margin: 0
+	        });
+	    }
+	});
+
+
+/***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var transitionEvents = __webpack_require__(10);
+	var insertKeyframesRule = __webpack_require__(9);
 	var appendVendorPrefix = __webpack_require__(8);
 
 	module.exports = function(animation){
@@ -833,48 +914,12 @@
 
 
 /***/ },
-/* 7 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var insertRule = __webpack_require__(10);
-	var vendorPrefix = __webpack_require__(11)();
-	var index = 0;
-
-	module.exports = function(keyframes) {
-	  // random name
-	  var name = 'anim_' + (++index) + (+new Date);
-	  var css = "@" + vendorPrefix + "keyframes " + name + " {";
-
-	  for (var key in keyframes) {
-	    css += key + " {";
-
-	    for (var property in keyframes[key]) {
-	      var part = ":" + keyframes[key][property] + ";";
-	      // We do vendor prefix for every property
-	      css += vendorPrefix + property + part;
-	      css += property + part;
-	    }
-
-	    css += "}";
-	  }
-
-	  css += "}";
-
-	  insertRule(css);
-
-	  return name
-	}
-
-
-/***/ },
 /* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var getVendorPropertyName = __webpack_require__(12);
+	var getVendorPropertyName = __webpack_require__(13);
 
 	module.exports = function(target, sources) {
 	  var to = Object(target);
@@ -906,6 +951,42 @@
 
 /***/ },
 /* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var insertRule = __webpack_require__(11);
+	var vendorPrefix = __webpack_require__(12)();
+	var index = 0;
+
+	module.exports = function(keyframes) {
+	  // random name
+	  var name = 'anim_' + (++index) + (+new Date);
+	  var css = "@" + vendorPrefix + "keyframes " + name + " {";
+
+	  for (var key in keyframes) {
+	    css += key + " {";
+
+	    for (var property in keyframes[key]) {
+	      var part = ":" + keyframes[key][property] + ";";
+	      // We do vendor prefix for every property
+	      css += vendorPrefix + property + part;
+	      css += property + part;
+	    }
+
+	    css += "}";
+	  }
+
+	  css += "}";
+
+	  insertRule(css);
+
+	  return name
+	}
+
+
+/***/ },
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1006,7 +1087,7 @@
 
 
 /***/ },
-/* 10 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1031,7 +1112,7 @@
 
 
 /***/ },
-/* 11 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1050,12 +1131,12 @@
 
 
 /***/ },
-/* 12 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var builtinStyle = __webpack_require__(13);
+	var builtinStyle = __webpack_require__(14);
 	var prefixes = ['Moz', 'Webkit', 'O', 'ms'];
 	var domVendorPrefix;
 
@@ -1119,7 +1200,7 @@
 
 
 /***/ },
-/* 13 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
