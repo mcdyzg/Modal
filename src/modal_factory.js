@@ -19,7 +19,8 @@ module.exports = function(animation){
             backdrop: React.PropTypes.oneOfType([
                 React.PropTypes.bool,
                 React.PropTypes.string
-            ])
+            ]),
+            backdropHide: React.PropTypes.bool
         },
 
         /**
@@ -33,6 +34,7 @@ module.exports = function(animation){
          *  - `animation` – `{object}` - 具体的动画效果对象
          *  - `keyboard` – `{boolean}` - 是否需要esc键隐藏modal
          *  - `backdrop` – `{boolean}` - 是否显示背景
+         *  - `backdropHide` – `{boolean}` - 点击背景是否会关闭modal，默认true
          *
          * @description
          * 设置default props
@@ -45,7 +47,8 @@ module.exports = function(animation){
                 onHide: function(){},
                 animation: animation,
                 keyboard: true,
-                backdrop: true
+                backdrop: true,
+                backdropHide: true
             };
         },
         /**
@@ -180,7 +183,7 @@ module.exports = function(animation){
             var contentStyle = animation.getContentStyle(willHidden);
             var ref = animation.getRef(willHidden);
             var sharp = animation.getSharp && animation.getSharp(willHidden);
-            var backdrop = this.props.backdrop? <div onClick={this.hide} style={backdropStyle}/>: undefined;
+            var backdrop = this.props.backdrop? <div onClick={this.props.backdropHide?this.hide:''} style={backdropStyle}/>: undefined;
             //
             if(willHidden) {
                 var node = this.refs[ref].getDOMNode();
@@ -215,10 +218,10 @@ module.exports = function(animation){
         enter: function(){
             this.props.onShow();
         },
-        // 显示modal
+        // 显示modal 将onShow回调放到了这里
         show: function(){
             if(!this.hasHidden()) return;
-
+            this.props.onShow();
             this.setState({
                 willHidden: false,
                 hidden: false

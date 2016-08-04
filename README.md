@@ -76,3 +76,12 @@ var Example = React.createClass({
     }
 });
 ```
+
+## CHANGELOG ##
+
+tag ：1.1.0 增加从底部弹出效果，可以作为选择框
+
+tag ：1.2.0 
+
+1. 增加backdropHide属性，bool类型，true的时候点击背景可以关闭modal，false的时候不可以
+2. 调整this.props.onShow()位置到this.enter中执行，modal出现时调用
