@@ -76,3 +76,6 @@ var Example = React.createClass({
     }
 });
 ```
+
+## ChangeLog
+1.3.0 修复1.2.0 backdropHide bug

@@ -19,6 +19,10 @@ module.exports = function(animation){
             backdrop: React.PropTypes.oneOfType([
                 React.PropTypes.bool,
                 React.PropTypes.string
+            ]),
+            backdropHide: React.PropTypes.oneOfType([
+                React.PropTypes.bool,
+                React.PropTypes.string
             ])
         },
 
@@ -33,7 +37,7 @@ module.exports = function(animation){
          *  - `animation` – `{object}` - 具体的动画效果对象
          *  - `keyboard` – `{boolean}` - 是否需要esc键隐藏modal
          *  - `backdrop` – `{boolean}` - 是否显示背景
-         *
+         *  - `backdropHide` – `{boolean}` - 是否点击关闭modal
          * @description
          * 设置default props
          *
@@ -45,7 +49,8 @@ module.exports = function(animation){
                 onHide: function(){},
                 animation: animation,
                 keyboard: true,
-                backdrop: true
+                backdrop: true,
+                backdropHide: true
             };
         },
         /**
@@ -180,7 +185,7 @@ module.exports = function(animation){
             var contentStyle = animation.getContentStyle(willHidden);
             var ref = animation.getRef(willHidden);
             var sharp = animation.getSharp && animation.getSharp(willHidden);
-            var backdrop = this.props.backdrop? <div onClick={this.hide} style={backdropStyle}/>: undefined;
+            var backdrop = this.props.backdrop? (this.props.backdropHide ? <div onClick={this.hide} style={backdropStyle}/> : <div style={backdropStyle}/>): undefined;
             //
             if(willHidden) {
                 var node = this.refs[ref].getDOMNode();
@@ -218,7 +223,7 @@ module.exports = function(animation){
         // 显示modal
         show: function(){
             if(!this.hasHidden()) return;
-
+            this.props.onShow();
             this.setState({
                 willHidden: false,
                 hidden: false
@@ -242,8 +247,8 @@ module.exports = function(animation){
         // 监听esc按键，隐藏modal
         listenKeyboard: function(event) {
             if (this.props.keyboard &&
-                    (event.key === "Escape" ||
-                     event.keyCode === 27)) {
+                (event.key === "Escape" ||
+                event.keyCode === 27)) {
                 this.hide();
             }
         },
