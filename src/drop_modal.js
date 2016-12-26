@@ -1,8 +1,8 @@
-var modalFactory = require('./modal_factory');
-var insertKeyframesRule = require('react-kit/insertKeyframesRule');
-var appendVendorPrefix = require('react-kit/appendVendorPrefix');
+import modalFactory from './modal_factory';
+const insertKeyframesRule = require('react-kit/insertKeyframesRule');
+const appendVendorPrefix = require('react-kit/appendVendorPrefix');
 
-var animation = {
+const animation = {
     show: {
         animationDuration: '0.4s',
         animationTimingFunction: 'cubic-bezier(0.7,0,0.3,1)'
@@ -36,12 +36,12 @@ var animation = {
     })
 };
 
-var showAnimation = animation.show;
-var hideAnimation = animation.hide;
-var showModalAnimation = animation.showModalAnimation;
-var hideModalAnimation = animation.hideModalAnimation;
+const showAnimation = animation.show;
+const hideAnimation = animation.hide;
+const showModalAnimation = animation.showModalAnimation;
+const hideModalAnimation = animation.hideModalAnimation;
 
-module.exports = modalFactory({
+export default modalFactory({
 
     show : showAnimation,
     hide : hideAnimation,

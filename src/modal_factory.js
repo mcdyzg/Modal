@@ -1,30 +1,32 @@
-var transitionEvents = require('react-kit/transitionEvents');
+import React from 'react'
+import ReactDOM from 'react-dom'
+
 var insertKeyframesRule = require('react-kit/insertKeyframesRule');
 var appendVendorPrefix = require('react-kit/appendVendorPrefix');
+var transitionEvents = require('react-kit/transitionEvents');
 
-module.exports = function(animation){
-
-    return React.createClass({
-        propTypes: {
-            className: React.PropTypes.string,
-            // 设置esc键是否可以关闭dialog.
-            keyboard: React.PropTypes.bool,
-            // 回调函数，show时候回调
-            onShow: React.PropTypes.func,
-            // 回调函数，hide时候回调
-            onHide: React.PropTypes.func,
-            //
-            animation: React.PropTypes.object,
-            // 是否需要modal的背景
-            backdrop: React.PropTypes.oneOfType([
-                React.PropTypes.bool,
-                React.PropTypes.string
-            ]),
-            backdropHide: React.PropTypes.oneOfType([
-                React.PropTypes.bool,
-                React.PropTypes.string
-            ])
-        },
+export default  function(animation){
+    
+    return class Modal extends React.Component{
+        /**
+         * @doc overview
+         * @name getInitialState
+         *
+         * @returns {Object} -state object
+         *  - `willHidden` – `{boolean}` - 要不要隐藏
+         *  - `hidden` – `{boolean}` - 是否隐藏
+         *
+         * @description
+         * 返回state数据对象
+         *
+         */
+        constructor(props){
+            super(props)
+            this.state = {
+                willHidden: false,
+                hidden: true
+            }
+        }
 
         /**
          * @doc overview
@@ -42,35 +44,16 @@ module.exports = function(animation){
          * 设置default props
          *
          */
-        getDefaultProps: function() {
-            return {
-                className: "",
-                onShow: function(){},
-                onHide: function(){},
-                animation: animation,
-                keyboard: true,
-                backdrop: true,
-                backdropHide: true
-            };
-        },
-        /**
-         * @doc overview
-         * @name getInitialState
-         *
-         * @returns {Object} -state object
-         *  - `willHidden` – `{boolean}` - 要不要隐藏
-         *  - `hidden` – `{boolean}` - 是否隐藏
-         *
-         * @description
-         * 返回state数据对象
-         *
-         */
-        getInitialState: function(){
-            return {
-                willHidden: false,
-                hidden: true
-            }
-        },
+
+        static defaultProps = {
+            className: "",
+            onShow: function(){},
+            onHide: function(){},
+            animation: animation,
+            keyboard: true,
+            backdrop: true,
+            backdropHide: true
+        };
 
         /**
          * @doc overview
@@ -83,30 +66,10 @@ module.exports = function(animation){
          * 返回modal是否隐藏，通过这个字段来阻断dom的渲染
          *
          */
-        hasHidden: function(){
+        hasHidden(){
             return this.state.hidden;
-        },
+        }
 
-        /**
-         * @doc overview
-         * @name componentDidMount
-         *
-         * @description
-         * render之后执行，目的是在transition事件中添加监听
-         *
-         */
-        componentDidMount: function(){
-            var ref = this.props.animation.getRef();
-            var node = this.refs[ref].getDOMNode();
-            var endListener = function(e) {
-                if (e && e.target !== node) {
-                    return;
-                }
-                transitionEvents.removeEndEventListener(node, endListener);
-                this.enter();
-            }.bind(this);
-            transitionEvents.addEndEventListener(node, endListener);
-        },
 
         /**
          * @doc overview
@@ -116,14 +79,14 @@ module.exports = function(animation){
          * 显示backdrop的动画样式
          *
          */
-        showBackdropAnimation: insertKeyframesRule({
+        showBackdropAnimation=insertKeyframesRule({
             '0%': {
                 opacity: 0
             },
             '100%': {
                 opacity: 0.9
             }
-        }),
+        })
 
         /**
          * @doc overview
@@ -133,14 +96,15 @@ module.exports = function(animation){
          * 隐藏backdrop的动画样式
          *
          */
-        hideBackdropAnimation: insertKeyframesRule({
+        hideBackdropAnimation=insertKeyframesRule({
             '0%': {
                 opacity: 0.9
             },
             '100%': {
                 opacity: 0
             }
-        }),
+        })
+
 
         /**
          * @doc overview
@@ -155,7 +119,7 @@ module.exports = function(animation){
          * 实例中需抛出 animation.show，animation.hide 对象
          *
          */
-        getBackdropStyle: function(willHidden) {
+        getBackdropStyle(willHidden) {
             var self = this;
 
             return appendVendorPrefix({
@@ -171,9 +135,61 @@ module.exports = function(animation){
                 animationName: willHidden ? self.hideBackdropAnimation : self.showBackdropAnimation,
                 animationTimingFunction: (willHidden ? animation.hide : animation.show).animationTimingFunction
             });
-        },
+        }
 
-        render: function() {
+        // hide modal 回调
+        leave(){
+            this.setState({
+                hidden: true
+            });
+            this.props.onHide();
+        }
+        // show modal回调
+        enter(){
+            this.props.onShow();
+        }
+        // 显示modal
+        show(){
+            if(!this.hasHidden()) return;
+            this.props.onShow();
+            this.setState({
+                willHidden: false,
+                hidden: false
+            });
+        }
+        // 隐藏modal
+        hide = () => {
+            if(this.hasHidden()) return;
+
+            this.setState({
+                willHidden: true
+            });
+        }
+        // hide show toggle
+        toggle(){
+            if(this.hasHidden())
+                this.show();
+            else
+                this.hide();
+        }
+        // 监听esc按键，隐藏modal
+        listenKeyboard = (event) => {
+            if (this.props.keyboard &&
+                (event.key === "Escape" ||
+                event.keyCode === 27)) {
+                this.hide();
+            }
+        }
+
+        componentDidMount() {
+            window.addEventListener("keydown", this.listenKeyboard, true);
+        }
+
+        componentWillUnmount() {
+            window.removeEventListener("keydown", this.listenKeyboard, true);
+        }
+
+        render(){
             // 判断是否是隐藏的modal，如果是就不需要进行render了。
             var hidden = this.hasHidden();
             if(hidden) return null;
@@ -188,7 +204,7 @@ module.exports = function(animation){
             var backdrop = this.props.backdrop? (this.props.backdropHide ? <div onClick={this.hide} style={backdropStyle}/> : <div style={backdropStyle}/>): undefined;
             //
             if(willHidden) {
-                var node = this.refs[ref].getDOMNode();
+                var node = this.refs[ref];
                 var endListener = function(e) {
                     if (e && e.target !== node) {
                         return;
@@ -208,58 +224,6 @@ module.exports = function(animation){
                 </div>
                 {backdrop}
              </span>);
-        },
-        // hide modal 回调
-        leave: function(){
-            this.setState({
-                hidden: true
-            });
-            this.props.onHide();
-        },
-        // show modal回调
-        enter: function(){
-            this.props.onShow();
-        },
-        // 显示modal
-        show: function(){
-            if(!this.hasHidden()) return;
-            this.props.onShow();
-            this.setState({
-                willHidden: false,
-                hidden: false
-            });
-        },
-        // 隐藏modal
-        hide: function(){
-            if(this.hasHidden()) return;
-
-            this.setState({
-                willHidden: true
-            });
-        },
-        // hide show toggle
-        toggle: function(){
-            if(this.hasHidden())
-                this.show();
-            else
-                this.hide();
-        },
-        // 监听esc按键，隐藏modal
-        listenKeyboard: function(event) {
-            if (this.props.keyboard &&
-                (event.key === "Escape" ||
-                event.keyCode === 27)) {
-                this.hide();
-            }
-        },
-
-        componentDidMount: function() {
-            window.addEventListener("keydown", this.listenKeyboard, true);
-        },
-
-        componentWillUnmount: function() {
-            window.removeEventListener("keydown", this.listenKeyboard, true);
         }
-
-    });
+    }
 }

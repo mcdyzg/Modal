@@ -1,4 +1,6 @@
-var ModalFactory = require('../src/modal');
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {BottomModal,DropModal,LeftModal,ScaleModal,WaveModal} from '../src/index'
 
 var btnStyle = {
     margin: '1em auto',
@@ -16,43 +18,53 @@ var containerStyle = {
     textAlign: 'center'
 };
 
-var APP = React.createClass({
+class APP extends React.Component{
 
-    toggleDialog: function(ref){
+    constructor(props){
+        super(props)
+    }
+
+    toggleDialog(ref){
 
         return function(){
             this.refs[ref].toggle();
         }.bind(this)
-    },
+    }
 
-    getContent: function(ref){
+    getContent(ref){
         return (
             <div style={containerStyle}>
                 <h2 style={{margin: 0, color: '#C94E50', fontWeight: 400}}></h2>
                 <button style={btnStyle} onClick={this.toggleDialog(ref)}>关闭</button>
             </div>
         );
-    },
+    }
 
-    getTiggerAndModal: function(ref, index){
-        var Modal = ModalFactory[ref];
-        return  (
-            <div key={'modal_'+index}>
-                <button style={btnStyle} onClick={this.toggleDialog(ref)}>Open {ref}</button>
-                <Modal ref={ref} className="modal">{this.getContent(ref)}</Modal>
-            </div>
-        );
-    },
-
-    render: function() {
+    render() {
         var self = this;
         return (
             <div>
-                {['DropModal','LeftModal','ScaleModal','WaveModal','BottomModal'].map(function(name, ind){
-                    return self.getTiggerAndModal(name, ind);
-                })}
+                <button style={btnStyle} onClick={this.toggleDialog('BottomModal')}>BottomModal </button>
+                <br/>
+                <BottomModal ref='BottomModal' className="modal">{this.getContent('BottomModal')}</BottomModal>
+                <button style={btnStyle} onClick={this.toggleDialog('DropModal')}>DropModal </button>
+                <br/>
+                <DropModal ref='DropModal' className="modal">{this.getContent('DropModal')}</DropModal>
+                <button style={btnStyle} onClick={this.toggleDialog('LeftModal')}>LeftModal </button>
+                <br/>
+                <LeftModal ref='LeftModal' className="modal">{this.getContent('LeftModal')}</LeftModal>
+                <button style={btnStyle} onClick={this.toggleDialog('ScaleModal')}>ScaleModal </button>
+                <br/>
+                <ScaleModal ref='ScaleModal' className="modal">{this.getContent('ScaleModal')}</ScaleModal>
+                <button style={btnStyle} onClick={this.toggleDialog('WaveModal')}>WaveModal </button>
+                <br/>
+                <WaveModal ref='WaveModal' className="modal">{this.getContent('WaveModal')}</WaveModal>
             </div>
         );
     }
-});
-ReactDOM.render(<APP/>, document.getElementById('AppContainer'));
+};
+ReactDOM.render(<APP/>, document.getElementById('app'));
+
+                // {['DropModal','LeftModal','ScaleModal','WaveModal','BottomModal'].map(function(name, ind){
+                //     return self.getTiggerAndModal(name, ind);
+                // })}

@@ -1,1 +1,3 @@
-module.exports = require('./src/modal');
+'use strict';
+
+module.exports = require('./lib/index');
